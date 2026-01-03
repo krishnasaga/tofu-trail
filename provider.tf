@@ -9,7 +9,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "my-tofu-state-bucket"
+    bucket  = "my-tofu-pract-bucket-state-1"
     key     = "terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
