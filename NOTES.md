@@ -84,42 +84,7 @@ Lambda must allow API Gateway to invoke it (Lambda permission: lambda:InvokeFunc
 
 A **Lambda trigger** is an **event source mapping or integration** that causes AWS to invoke a Lambda function when an event occurs.
 
-Two common forms:
+Two common forms of triggers
 
 * **Push model**: the service calls Lambda directly (e.g., S3 events, API Gateway, EventBridge)
 * **Poll model**: Lambda polls a queue/stream via an event source mapping (e.g., SQS, Kinesis, DynamoDB Streams)
-
-In short: **a trigger is the connection that makes events run your Lambda.**
-
----
-
-## Bucket Policy vs IAM Policy
-
-Both are policies, but they attach in different places and answer different questions.
-
-### IAM Policy (identity-based policy)
-
-* **Attached to**: IAM user / group / role
-* Controls: what that identity can do in AWS
-* Usually used for: granting a role access to many services/resources
-
-**Definition:** an identity-based policy grants/denies permissions to the identity it is attached to.
-
-### Bucket Policy (resource-based policy for S3)
-
-* **Attached to**: an S3 bucket
-* Controls: who can access that bucket and how
-* Often used for: cross-account access, public access control, enforcing conditions (TLS-only, specific VPC endpoint, etc.)
-
-**Definition:** a bucket policy is a resource-based policy that grants/denies permissions on the bucket (and optionally objects) to specified principals.
-
-### Precise difference
-
-* IAM policy: **attached to an identity** → “what can *this role/user* do?”
-* Bucket policy: **attached to a resource** → “who can access *this bucket*?”
-* Bucket policy can name **external principals** (other accounts, anonymous `*`), making it a common tool for **cross-account S3 access**.
-
----
-
-If you want, I can add a **one-screen example** showing:
-“Role A can read `my-bucket/photos/*`” using (1) IAM policy only vs (2) bucket policy + role.
