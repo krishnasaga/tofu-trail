@@ -111,15 +111,14 @@ https://example.com (same scheme + host + port).
 - This is cross-origin because: Page origin = https://app.example.com and API origin = https://api.example.com. Different host ⇒ different origin.
 
 #### OPTIONS /data
-- Origin: https://app.example.com
-- Access-Control-Request-Method: GET
-- Access-Control-Request-Headers: authorization
+- `Origin: https://app.example.com`
+- `Access-Control-Request-Method: GET`
+- `Access-Control-Request-Headers: authorization`
 - The API responds (e.g., 204 No Content) but the CORS response headers are missing or wrong, for example:
-- No Access-Control-Allow-Origin, or it doesn’t match https://app.example.com
-- Access-Control-Allow-Headers does not include authorization
+- No` Access-Control-Allow-Origin`, or it doesn’t match `https://app.example.com`
 - Because the preflight check fails, the browser will:
 - Block the request
-- NOT send the real GET /data at all
+- NOT send the real `GET /data` at all
 
 #### Result in JavaScript:
 - The promise rejects (often shown as TypeError: CORS preflight blocked)
@@ -128,12 +127,100 @@ https://example.com (same scheme + host + port).
 Key point: Preflight is a permission check. If the server doesn’t explicitly allow the origin/method/headers, the browser stops the request before it ever sends the actual GET.
 
 
-#### Different Origin Request (Allowed) Scenario
+#### Cross-Origin GET with Preflight (Allowed) Scenario
 
 - Fix server sends allows the site throgh CORS headers
 - 🟢 PREFLIGHT CHECK PASSED
 
 ![](https://img.plantuml.biz/plantuml/png/dLHDJ-Cm4BtFhnZbr8gcHQizHGZHejLIM9g8bXiNamp4siGszeGY4FyTEssbVaNQvMhFc_VXbrmu5fQRkWAMN15UMkrSd5hvB1N-_hN0fUGICqjFbNmk6K3ah2tUEx9WF5BcqWZ5EB5wkNyMZOt1NibiN38Q2ME6z2PgKz4mrtK_Gk7GJ-n1ikasH1w1P5E0m8_n-OOsmTIGmWugM4y5W2TCMbyZgGfw6vRihGUTyVQsgyNj7pp1wpc0qaoeNprwO_5wZhPHBe4duhpiHHrgHuLW4Gtm0n1hub8N2KQUEHhuWv94GTOb-E4jD_xIodV1Kgl83qr8MCztnlelgVC8F-6p3nFAHUDeVnobGu5AgzZ9mBpUF00k2H_Nlkl6CPhD6mw1L8715-maaqrzZDbYcixcs8f_KAiU95t1FgXndfFlowLMR7KLtz5BGuxZsxLVRxTpvceJWTWs1A40Es_nu_GdpZG6E2a-M3UkAhsC_rVe2hMIwOxhN8rqg3m8hgtKluQslIh1tUS-5i0ffZTj7TFPz_p3mISGIamvoLToxLxiYR28YZx0XUz7-2Dy0G00)
+
+This diagram shows a cross-origin request where the browser performs a CORS preflight (**OPTIONS**) first, the server allows it, and then the real **GET** succeeds.
+
+#### User opens the app (same-origin page load)
+
+The user opens:
+
+- `https://app.example.com`
+
+The browser requests the page from the same origin:
+
+- `GET /index.html` from `https://app.example.com`
+
+The App responds with:
+
+- HTML + JavaScript
+
+That JavaScript runs in the browser and calls an API on a different origin.
+
+---
+
+#### Why this is cross-origin
+
+- Page origin = `https://app.example.com`
+- API origin  = `https://api.example.com`
+
+Different host ⇒ different origin.
+---
+
+#### Preflight request (OPTIONS)
+
+The browser sends:
+
+- `OPTIONS /data`
+
+With headers like:
+
+- `Origin: https://app.example.com`
+- `Access-Control-Request-Method: GET`
+- `Access-Control-Request-Headers: authorization`
+
+---
+
+#### Preflight response (Allowed)
+
+The API replies (often `204 No Content`) and includes CORS permission headers:
+
+- `Access-Control-Allow-Origin: https://app.example.com`
+- `Access-Control-Allow-Methods: GET`
+- `Access-Control-Allow-Headers: authorization`
+
+Because the preflight succeeded, the browser is allowed to proceed.
+
+---
+
+#### Real request (GET)
+
+Now the browser sends the actual request:
+
+- `GET /data`
+
+With headers like:
+
+- `Origin: https://app.example.com`
+- `Authorization: Bearer <token>`
+
+---
+
+#### API response (data + CORS)
+
+The API responds with the real data:
+
+- `200 OK` + JSON
+
+And includes:
+
+- `Access-Control-Allow-Origin: https://app.example.com`
+
+---
+
+#### Result in the browser
+
+Since CORS is satisfied:
+
+- The browser allows JavaScript to read the response body
+- The page successfully receives and uses the JSON
+
+---
 
 
 Note: Browsers enforced SOP since the 1990s, so JavaScript (including early XHR ‘API calls’) could only _read_ same-origin responses. CORS later standardized (W3C Recommendation on 16 Jan 2014) the server-controlled way to allow cross-origin reads.
