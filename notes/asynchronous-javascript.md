@@ -112,3 +112,20 @@ Promises let you:
 - keep the program running (**non-blocking**)
 - run your **success code** or **error code** **later**, when the network finishes
 
+## Using Async and Await
+
+Async/await is just a cleaner way to write the same Promise logic. It does not change how the network works. The HTTP request is still non-blocking; you’re just writing it in a style that looks more like normal step-by-step code.
+
+Non-blocking idea (same as before)
+
+- fetch() starts the HTTP request and returns a Promise immediately.
+
+- With await, you’re saying: “pause THIS async function here, and continue when the Promise finishes.”
+
+- While this function is paused, the browser is still free (UI doesn’t freeze), because you are not running a big busy loop.
+
+- So await does not block the whole page. It only pauses the async function and lets the browser continue doing other work.
+
+Proof with log order (same idea)
+
+
