@@ -20,6 +20,7 @@ resource "aws_cloudfront_distribution" "main" {
     origin_access_control_id = aws_cloudfront_origin_access_control.main.id
   }
 
+
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
@@ -37,7 +38,6 @@ resource "aws_cloudfront_distribution" "main" {
     default_ttl = 3600
     max_ttl     = 86400
   }
-
   restrictions {
     geo_restriction {
       restriction_type = "none"
