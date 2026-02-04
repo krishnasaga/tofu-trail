@@ -25,6 +25,7 @@ resource "aws_cloudfront_distribution" "main" {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "S3-${aws_s3_bucket.main.id}"
+    viewer_protocol_policy = "redirect-to-https"
     compress               = true
 
     forwarded_values {
