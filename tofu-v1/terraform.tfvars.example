@@ -1,0 +1,8 @@
+# Optional: Create terraform.tfvars for custom values
+# Copy this file to terraform.tfvars and modify as needed
+
+# aws_region          = "us-east-1"
+# project_name        = "my-serverless-app"
+# environment         = "dev"
+# s3_bucket_name      = "my-custom-bucket"
+# dynamodb_table_name = "my-custom-table"

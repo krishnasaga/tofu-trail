@@ -13,7 +13,7 @@ crash.*.log
 *.tfvars
 *.tfvars.json
 
-# Ignore override files as they are usually used to override resources locally
+# Ignore override files
 override.tf
 override.tf.json
 *_override.tf
@@ -23,5 +23,17 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Lock file
-.terraform.lock.hcl
+# Lambda deployment packages
+*.zip
+lambda/function.zip
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
